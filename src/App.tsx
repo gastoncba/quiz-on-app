@@ -1,17 +1,18 @@
 import { ThemeProvider } from '@emotion/react';
+import { Container } from '@mui/material';
 
-import { themeMaterial } from './settings/materialTheme.setting';
-import { Typography } from '@mui/material';
+import { themeMaterial } from './settings';
+import { RoutesController } from './routes/RouterController.routes';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   return (
     <>
       <ThemeProvider theme={themeMaterial}>
-        <Typography variant="h1">Quiz On</Typography>
-        <Typography variant="h2">Bienvenido</Typography>
-        <Typography variant="body1">
-          Empeza a constestar nuestros quiz
-        </Typography>
+        <ToastContainer />
+        <Container maxWidth="xl">
+          <RoutesController />
+        </Container>
       </ThemeProvider>
     </>
   );

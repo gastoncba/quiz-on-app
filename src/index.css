@@ -1,13 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Epilogue&display=swap');
+@font-face {
+  font-family: 'Gilroy-Bold';
+  src:
+    local('Gilroy-Bold'),
+    url(./assets/fonts/Gilroy-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Gilroy-Regular';
+  src:
+    local('Gilroy-Regular'),
+    url(./assets/fonts/Gilroy-Regular.ttf) format('truetype');
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  /* line-height: 1.5;
-  font-weight: 400; */
-
+  width: 100vw;
+  height: 100vh;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #8f59a8;
+  background: linear-gradient(180deg, #d0e, #91f);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

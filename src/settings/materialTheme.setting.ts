@@ -2,42 +2,37 @@ import { createTheme } from '@mui/material/styles';
 
 export const themeMaterial = createTheme({
   typography: {
-    fontFamily: 'Epilogue, sans-serif;',
+    fontFamily: 'Gilroy-Regular, sans-serif;',
 
     h1: {
-      fontFamily: 'Epilogue, sans-serif;',
-      fontWeight: 700,
+      fontFamily: 'Gilroy-Bold, sans-serif;',
     },
     h2: {
-      fontFamily: 'Epilogue, sans-serif;',
-      fontWeight: 700,
+      fontFamily: 'Gilroy-Bold, sans-serif;',
     },
     h3: {
-      fontFamily: 'Epilogue, sans-serif;',
-      fontWeight: 700,
+      fontFamily: 'Gilroy-Bold, sans-serif;',
     },
     h4: {
-      fontFamily: 'Epilogue, sans-serif;',
-      fontWeight: 700,
+      fontFamily: 'Gilroy-Bold, sans-serif;',
     },
     h5: {
-      fontFamily: 'Epilogue, sans-serif;',
-      fontWeight: 700,
+      fontFamily: 'Gilroy-Bold, sans-serif;',
     },
     h6: {
-      fontFamily: 'Epilogue, sans-serif;',
-      fontWeight: 700,
+      fontFamily: 'Gilroy-Bold, sans-serif;',
     },
     button: {
       textTransform: 'capitalize',
+      fontFamily: 'Gilroy-Bold, sans-serif;',
     },
   },
 
   palette: {
     primary: {
-      light: '#C418FF',
-      main: '#8F59A8',
-      dark: '#291A4A',
+      light: '#ff339f',
+      main: '#f08',
+      dark: '#b2005f',
       contrastText: '#fff',
     },
     success: {
