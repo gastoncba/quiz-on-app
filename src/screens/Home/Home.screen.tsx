@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -14,10 +14,13 @@ import {
   Modal,
   Form,
   Input,
+  Switch,
+  List,
+  Item,
 } from '../../components';
 import { Category } from '../../models';
 import { CategoryServices } from '../../services';
-import { styles } from '../../settings';
+import { styles, themeMaterial } from '../../settings';
 
 interface HomeProps {}
 
@@ -26,6 +29,9 @@ export const HomeScreen: React.FC<HomeProps> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const { green, blueberry, favorite, star, red } = styles.color;
   const [open, setOpen] = useState<boolean>(false);
+  const [optionValue, setOptionValue] = useState<string>('');
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [listItems, setListItems] = useState<Item[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,6 +67,24 @@ export const HomeScreen: React.FC<HomeProps> = () => {
   const sendQuestion = async (value: any) => {
     console.log(value);
   };
+
+  const addOption = () => {
+    if (optionValue.trim() !== '') {
+      const nuevaOpcion: Item = {
+        primaryText: optionValue.trim(),
+        secondaryText: isCorrect ? 'Correcta' : 'Incorrecta',
+        value: optionValue.trim(),
+        id: listItems.length + 1,
+        secondaryTypographyStyles: {
+          color: isCorrect ? green : red,
+        },
+      };
+
+      setListItems([...listItems, nuevaOpcion]);
+    }
+  };
+
+  //const deleteOption = () => {};
   return (
     <>
       <motion.h3
@@ -94,12 +118,10 @@ export const HomeScreen: React.FC<HomeProps> = () => {
                 onClick={() =>
                   navigate('/questionnaire', { state: { category: item } })
                 }
+                colorHover={renderColor(item.name)}
                 style={{
                   bgcolor: renderColor(item.name),
                   width: '100%',
-                  ':hover': {
-                    bgcolor: renderColor(item.name),
-                  },
                 }}
               />
             )}
@@ -115,9 +137,6 @@ export const HomeScreen: React.FC<HomeProps> = () => {
           >
             <IconButton
               icon={<Icon type="PLUS" />}
-              buttonStyle={{
-                ':hover': { bgcolor: 'primary.main' },
-              }}
               size="small"
               onClick={() => setOpen(true)}
             />
@@ -143,7 +162,65 @@ export const HomeScreen: React.FC<HomeProps> = () => {
           submitText="Guardar"
           onAction={sendQuestion}
         >
-          <Input value={''} setValue={() => {}} size="small" label="Opcion" />
+          <Grid
+            container
+            columnSpacing={2}
+            rowSpacing={2}
+            alignItems={'center'}
+          >
+            <Grid item md={6} sm={6} xs={12}>
+              <Input
+                value={optionValue}
+                setValue={(value) => setOptionValue(value)}
+                size="small"
+                label="Opcion"
+                multiline
+                fullWidth
+              />
+            </Grid>
+            <Grid item md={6} sm={6} xs={12}>
+              <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2 }}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', columnGap: 1 }}
+                >
+                  <Paragraph text={`Es correcta`} />
+                  <Paragraph
+                    text={`${isCorrect ? 'SI' : 'NO'}`}
+                    sx={{ color: isCorrect ? green : red }}
+                  />
+                </Box>
+                <Switch
+                  colorOn={themeMaterial.palette.primary.main}
+                  colorOff="gray"
+                  onChange={(isOn) => setIsCorrect(!isOn)}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2 }}>
+                <IconButton
+                  icon={<Icon type="PLUS" />}
+                  size="small"
+                  onClick={addOption}
+                />
+                <Paragraph text={'Agregar opcion'} />
+              </Box>
+            </Grid>
+          </Grid>
+          <Box>
+            <List
+              items={listItems}
+              onClick={(item) => console.log(item.value)}
+              secondaryAction={
+                <IconButton
+                  icon={<Icon type="CLOSE" sx={{ fontSize: 18 }} />}
+                  size="small"
+                  buttonStyle={{ bgcolor: '#bdbdbd' }}
+                  colorHover="gray"
+                />
+              }
+            />
+          </Box>
         </Form>
       </Modal>
     </>

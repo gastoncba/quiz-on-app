@@ -226,6 +226,7 @@ export const Form: React.FC<FormProps> = ({
                 px: 5,
                 py: 1,
                 fontSize: 16,
+                ':hover': { bgcolor: 'primary.main' },
               }}
             >
               {loading ? <Loader size={30} /> : submitText}

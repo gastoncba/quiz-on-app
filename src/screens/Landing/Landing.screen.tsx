@@ -31,11 +31,7 @@ export const LandingScreen: React.FC<LandingProps> = () => {
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
             <Button
               title="Empezar"
-              style={{
-                ':hover': {
-                  bgcolor: 'primary.dark',
-                },
-              }}
+              colorHover="primary.dark"
               onClick={() => navigate('/home')}
             />
           </Box>

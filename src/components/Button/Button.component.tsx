@@ -12,6 +12,7 @@ export interface ButtonI {
   onMouseLeave?: (params?: any) => any;
   color?: 'primary' | 'secondary' | 'inherit';
   disabled?: boolean;
+  colorHover?: string;
 }
 
 export const Button: React.FunctionComponent<ButtonI> = (props: ButtonI) => {
@@ -27,6 +28,9 @@ export const Button: React.FunctionComponent<ButtonI> = (props: ButtonI) => {
           px: 5,
           py: 1,
           fontSize: 16,
+          ':hover': {
+            bgcolor: props.colorHover || 'primary.main',
+          },
           ...props.style,
         }}
         variant={props.variant || 'contained'}

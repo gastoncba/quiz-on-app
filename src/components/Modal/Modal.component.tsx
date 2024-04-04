@@ -47,7 +47,12 @@ export const Modal: React.FunctionComponent<Props> = (props: Props) => {
         }}
       >
         {props.title}
-        <IconButton icon={<Icon type="CLOSE" />} onClick={props.onClose} />
+        <IconButton
+          icon={<Icon type="CLOSE" />}
+          onClick={props.onClose}
+          size="small"
+          colorHover={'primary.main'}
+        />
       </DialogTitle>
       <PerfectScrollbar>
         <DialogContent sx={{ p: 2, ...props.contentStyle }}>

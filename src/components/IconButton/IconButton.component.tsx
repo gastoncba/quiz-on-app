@@ -9,6 +9,7 @@ interface IconButtonProps {
   onMouseLeave?: () => any;
   buttonStyle?: SxProps<Theme>;
   size?: 'large' | 'medium' | 'small';
+  colorHover?: string;
 }
 
 export const IconButton: React.FunctionComponent<IconButtonProps> = (
@@ -16,7 +17,12 @@ export const IconButton: React.FunctionComponent<IconButtonProps> = (
 ) => {
   return (
     <MuiIconButton
-      sx={{ bgcolor: 'primary.main', color: 'white', ...props.buttonStyle }}
+      sx={{
+        bgcolor: 'primary.main',
+        color: 'white',
+        ...props.buttonStyle,
+        ':hover': { bgcolor: props.colorHover || 'primary.dark' },
+      }}
       onClick={props.onClick}
       onMouseOver={props.onMouseOver}
       onMouseLeave={props.onMouseLeave}
