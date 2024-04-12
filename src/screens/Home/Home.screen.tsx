@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Box, Container, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -17,10 +19,12 @@ import {
   Switch,
   List,
   Item,
+  SearchBar,
 } from '../../components';
 import { Category } from '../../models';
 import { CategoryServices } from '../../services';
 import { styles, themeMaterial } from '../../settings';
+import { Generics } from '../../utils';
 
 interface HomeProps {}
 
@@ -32,6 +36,9 @@ export const HomeScreen: React.FC<HomeProps> = () => {
   const [optionValue, setOptionValue] = useState<string>('');
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [listItems, setListItems] = useState<Item[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,35 +72,98 @@ export const HomeScreen: React.FC<HomeProps> = () => {
     }
   };
   const sendQuestion = async (value: any) => {
+    if (listItems.length === 0) {
+      showToast('Se debe agregar opciones', 'info');
+      return;
+    }
+
+    if (listItems.length === 1 && listItems[0].value.isCorrect) {
+      showToast('Debe existir una opciones incorectas y una sola correcta');
+      return;
+    }
+
+    if (!listItems.some((item) => item.value.isCorrect)) {
+      showToast('Debe existir una opcion correcta', 'info');
+      return;
+    }
+
+    if (!selectedCategory) {
+      showToast('Debe elegir una categoria para la pregunta', 'info');
+      return;
+    }
+
     console.log(value);
+    console.log(
+      'Opciones => ',
+      listItems.map((i) => i.value)
+    );
+    console.log('Categoryid => ', selectedCategory?.id);
   };
 
   const addOption = () => {
+    if (listItems.some((item) => item.value.isCorrect && isCorrect)) {
+      showToast('Solo puede haber una opcion correcta', 'info');
+      return;
+    }
+
     if (optionValue.trim() !== '') {
       const nuevaOpcion: Item = {
         primaryText: optionValue.trim(),
         secondaryText: isCorrect ? 'Correcta' : 'Incorrecta',
-        value: optionValue.trim(),
-        id: listItems.length + 1,
+        value: {
+          optionValue: optionValue.trim(),
+          isCorrect,
+        },
+        id: Generics.generateUniqueId(),
         secondaryTypographyStyles: {
           color: isCorrect ? green : red,
         },
+        secondaryAction: (
+          <IconButton
+            icon={<Icon type="CLOSE" sx={{ fontSize: 18 }} />}
+            size="small"
+            buttonStyle={{ bgcolor: '#bdbdbd' }}
+            colorHover="gray"
+            onClick={() => deleteOption(optionValue.trim())}
+          />
+        ),
       };
 
       setListItems([...listItems, nuevaOpcion]);
+      setOptionValue('');
     }
   };
 
-  //const deleteOption = () => {};
+  const deleteOption = (option: string) => {
+    setListItems((prevList) =>
+      prevList.filter((item) => item.primaryText !== option)
+    );
+  };
+
+  const changeCategory = (categoryName: string | null) => {
+    if (categoryName) {
+      const category = categories.find((c) => c.name === categoryName);
+      if (category) {
+        setSelectedCategory(category);
+      }
+    } else {
+      resetCategory();
+    }
+  };
+
+  const resetCategory = () => {
+    setSelectedCategory(null);
+  };
+
   return (
     <>
-      <motion.h3
+      <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.6 }}
       >
         <Paragraph text={'Categorias'} variant="h3" align="center" />
-      </motion.h3>
+      </motion.div>
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -146,7 +216,10 @@ export const HomeScreen: React.FC<HomeProps> = () => {
       )}
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+          resetCategory();
+        }}
         title="Pregunta"
         fullWidth
       >
@@ -208,19 +281,20 @@ export const HomeScreen: React.FC<HomeProps> = () => {
             </Grid>
           </Grid>
           <Box>
-            <List
-              items={listItems}
-              onClick={(item) => console.log(item.value)}
-              secondaryAction={
-                <IconButton
-                  icon={<Icon type="CLOSE" sx={{ fontSize: 18 }} />}
-                  size="small"
-                  buttonStyle={{ bgcolor: '#bdbdbd' }}
-                  colorHover="gray"
-                />
-              }
+            <PerfectScrollbar style={{ maxHeight: 250 }}>
+              <List items={listItems} />
+            </PerfectScrollbar>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1 }}>
+            <Paragraph text={'Categoria'} />
+            <SearchBar
+              options={categories.map((c) => c.name)}
+              onChange={(value) => changeCategory(value)}
             />
           </Box>
+          {selectedCategory && (
+            <Paragraph text={selectedCategory.name} sx={{ pt: 2 }} />
+          )}
         </Form>
       </Modal>
     </>

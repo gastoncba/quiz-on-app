@@ -17,6 +17,7 @@ export interface Item {
   id: number;
   primaryTypographyStyles?: React.CSSProperties;
   secondaryTypographyStyles?: React.CSSProperties;
+  secondaryAction?: JSX.Element;
 }
 
 interface Props {
@@ -24,7 +25,6 @@ interface Props {
   divider?: boolean;
   button?: boolean;
   onClick?: (item: Item) => void;
-  secondaryAction?: JSX.Element;
 }
 
 export const List: React.FunctionComponent<Props> = (props: Props) => {
@@ -58,10 +58,7 @@ export const List: React.FunctionComponent<Props> = (props: Props) => {
                   />
                 </ListItemButton>
               ) : (
-                <ListItem
-                  secondaryAction={props.secondaryAction}
-                  onClick={() => props.onClick && props.onClick(item)}
-                >
+                <ListItem secondaryAction={item.secondaryAction}>
                   {item.icon && <ListItemAvatar>{item.icon}</ListItemAvatar>}
                   <ListItemText
                     primary={item.primaryText}

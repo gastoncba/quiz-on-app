@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@emotion/react';
+import { ThemeProvider } from '@mui/material/styles';
 import { Container } from '@mui/material';
 
 import { themeMaterial } from './settings';

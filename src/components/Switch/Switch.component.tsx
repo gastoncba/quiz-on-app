@@ -53,7 +53,7 @@ export const Switch: React.FC<SwitchProps> = ({
           : colorOff || bgcolorSwitch,
         justifyContent: isOn ? 'flex-end' : 'flex-start',
       }}
-      data-isOn={isOn}
+      //data-isOn={isOn}
       onClick={toggleSwitch}
     >
       <motion.div style={handleStyles} layout transition={spring} />
