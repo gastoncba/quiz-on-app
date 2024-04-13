@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Box, Container, Grid } from '@mui/material';
@@ -25,6 +25,7 @@ import { Category } from '../../models';
 import { CategoryServices } from '../../services';
 import { styles, themeMaterial } from '../../settings';
 import { Generics } from '../../utils';
+import { QuestionServices } from '../../services';
 
 interface HomeProps {}
 
@@ -72,32 +73,43 @@ export const HomeScreen: React.FC<HomeProps> = () => {
     }
   };
   const sendQuestion = async (value: any) => {
-    if (listItems.length === 0) {
-      showToast('Se debe agregar opciones', 'info');
-      return;
-    }
+    try {
+      if (listItems.length === 0) {
+        showToast('Se debe agregar opciones', 'info');
+        return;
+      }
 
-    if (listItems.length === 1 && listItems[0].value.isCorrect) {
-      showToast('Debe existir una opciones incorectas y una sola correcta');
-      return;
-    }
+      if (listItems.length === 1 && listItems[0].value.isCorrect) {
+        showToast('Debe existir una opciones incorectas y una sola correcta');
+        return;
+      }
 
-    if (!listItems.some((item) => item.value.isCorrect)) {
-      showToast('Debe existir una opcion correcta', 'info');
-      return;
-    }
+      if (!listItems.some((item) => item.value.isCorrect)) {
+        showToast('Debe existir una opcion correcta', 'info');
+        return;
+      }
 
-    if (!selectedCategory) {
-      showToast('Debe elegir una categoria para la pregunta', 'info');
-      return;
-    }
+      if (!selectedCategory) {
+        showToast('Debe elegir una categoria para la pregunta', 'info');
+        return;
+      }
 
-    console.log(value);
-    console.log(
-      'Opciones => ',
-      listItems.map((i) => i.value)
-    );
-    console.log('Categoryid => ', selectedCategory?.id);
+      await QuestionServices.createQuestion({
+        title: value.question,
+        categoryId: selectedCategory?.id,
+        options: listItems.map((item) => ({
+          value: item.value.optionValue,
+          isCorrect: item.value.isCorrect,
+        })),
+      });
+      showToast('Pregunta agregada con exito!', 'success');
+      showToast('Muchas gracias 😉');
+    } catch (error) {
+      showToast('Error al agregar pregunta', 'error');
+    } finally {
+      setListItems([]);
+      resetCategory();
+    }
   };
 
   const addOption = () => {
@@ -281,20 +293,22 @@ export const HomeScreen: React.FC<HomeProps> = () => {
             </Grid>
           </Grid>
           <Box>
-            <PerfectScrollbar style={{ maxHeight: 250 }}>
+            <PerfectScrollbar style={{ maxHeight: 230 }}>
               <List items={listItems} />
             </PerfectScrollbar>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1 }}>
-            <Paragraph text={'Categoria'} />
+            <Box sx={{ display: 'flex', alignItems: 'baseline', columnGap: 1 }}>
+              <Paragraph text={'Categoria'} />
+              {selectedCategory && (
+                <Paragraph text={selectedCategory.name} color="primary.dark" />
+              )}
+            </Box>
             <SearchBar
               options={categories.map((c) => c.name)}
               onChange={(value) => changeCategory(value)}
             />
           </Box>
-          {selectedCategory && (
-            <Paragraph text={selectedCategory.name} sx={{ pt: 2 }} />
-          )}
         </Form>
       </Modal>
     </>

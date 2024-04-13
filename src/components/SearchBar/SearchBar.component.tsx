@@ -18,7 +18,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ options, onChange }) => {
         onChange={(event, value) => onChange(value)}
         renderInput={(params) => (
           <Paper
-            component="form"
+            component="div"
             sx={{
               p: '2px 4px',
               display: 'flex',
