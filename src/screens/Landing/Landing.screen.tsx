@@ -33,6 +33,7 @@ export const LandingScreen: React.FC<LandingProps> = () => {
               title="Empezar"
               colorHover="primary.dark"
               onClick={() => navigate('/home')}
+              animation
             />
           </Box>
         </motion.div>

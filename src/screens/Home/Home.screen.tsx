@@ -205,6 +205,7 @@ export const HomeScreen: React.FC<HomeProps> = () => {
                   bgcolor: renderColor(item.name),
                   width: '100%',
                 }}
+                animation
               />
             )}
           />
