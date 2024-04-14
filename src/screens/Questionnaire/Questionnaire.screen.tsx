@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Button, GridList, Paragraph, showToast } from '../../components';
 import { Category, Option, Question } from '../../models';
 import { QuestionnaireServices } from '../../services';
-//import { Stack } from '../../utils';
+import { Stack } from '../../utils';
 import { OptionItem } from './OptionItem';
 
 interface QuestionnaireProps {}
@@ -29,15 +29,15 @@ export const QuestionnaireScreen: React.FC<QuestionnaireProps> = () => {
   const [questionNumber, setQuestionNumber] = useState<number>(0);
   const navigate = useNavigate();
 
-  // const stackQuestions = useMemo(() => {
-  //   return new Stack<Question>();
-  // }, []);
+  const stackQuestions = useMemo(() => {
+    return new Stack<Question>();
+  }, []);
 
   const initQuiz = async () => {
     try {
       const questions = await QuestionnaireServices.initQuiz(category.id);
       for (const question of questions) {
-        //stackQuestions.push(question);
+        stackQuestions.push(question);
       }
       setQuestionNumber(questions.length);
       next();
@@ -49,16 +49,16 @@ export const QuestionnaireScreen: React.FC<QuestionnaireProps> = () => {
 
   const next = () => {
     setSelect(false);
-    // if (stackQuestions.isEmpty()) {
-    //   setFinish(true);
-    //   return;
-    // }
-    // const nextQuestion = stackQuestions.pop();
-    // if (nextQuestion) {
-    //   setQuestion(nextQuestion.title);
-    //   setOptions(nextQuestion.options);
-    //   setCurrentNumber(currentNumber + 1);
-    // }
+    if (stackQuestions.isEmpty()) {
+      setFinish(true);
+      return;
+    }
+    const nextQuestion = stackQuestions.pop();
+    if (nextQuestion) {
+      setQuestion(nextQuestion.title);
+      setOptions(nextQuestion.options);
+      setCurrentNumber(currentNumber + 1);
+    }
   };
 
   return (
