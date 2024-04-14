@@ -1,2 +1,2 @@
 export * from './generics.utils';
-export * from './DataEstructure.util';
+export * from './dataEstructure.util';
