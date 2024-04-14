@@ -3,7 +3,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Container } from '@mui/material';
 import { motion } from 'framer-motion';
 
-import { Button, GridList, Paragraph, showToast } from '../../components';
+import {
+  Button,
+  GridList,
+  Paragraph,
+  Switch,
+  Timer,
+  showToast,
+} from '../../components';
 import { Category, Option, Question } from '../../models';
 import { QuestionnaireServices } from '../../services';
 import { Stack } from '../../utils';
@@ -27,6 +34,9 @@ export const QuestionnaireScreen: React.FC<QuestionnaireProps> = () => {
   const [score, setScore] = useState<number>(0);
   const [currentNumber, setCurrentNumber] = useState<number>(0);
   const [questionNumber, setQuestionNumber] = useState<number>(0);
+  const [showTimer, setShowTimer] = useState<boolean>(true);
+  const [stopTimer, setStopTimer] = useState<boolean>(false);
+  const [resetTimer, setResetTimer] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const stackQuestions = useMemo(() => {
@@ -59,6 +69,11 @@ export const QuestionnaireScreen: React.FC<QuestionnaireProps> = () => {
       setOptions(nextQuestion.options);
       setCurrentNumber(currentNumber + 1);
     }
+
+    if (showTimer) {
+      setResetTimer(true);
+      setStopTimer(false);
+    }
   };
 
   return (
@@ -73,6 +88,15 @@ export const QuestionnaireScreen: React.FC<QuestionnaireProps> = () => {
                 variant="h6"
                 sx={{ py: 2 }}
               />
+              {showTimer && (
+                <Timer
+                  timeLimit={30}
+                  stopTimer={stopTimer}
+                  resetTimer={resetTimer}
+                  onZero={() => {}}
+                  sx={{ display: 'flex', justifyContent: 'center', pb: 2 }}
+                />
+              )}
               <Box sx={{ pointerEvents: select ? 'none' : 'auto' }}>
                 <GridList
                   items={options}
@@ -89,7 +113,21 @@ export const QuestionnaireScreen: React.FC<QuestionnaireProps> = () => {
                         if (isCorrect) {
                           setScore(score + 1);
                         }
+
+                        if (showTimer) {
+                          setStopTimer(true);
+                          setResetTimer(false);
+                        }
                         setSelect(true);
+                        showToast(
+                          isCorrect
+                            ? 'Correcto!'
+                            : 'Incorrecto, Suerte para la próxima',
+                          isCorrect ? undefined : 'error',
+                          isCorrect ? '😎' : '😔',
+                          'bottom-center',
+                          2500
+                        );
                       }}
                     />
                   )}
@@ -142,8 +180,18 @@ export const QuestionnaireScreen: React.FC<QuestionnaireProps> = () => {
         <>
           <Paragraph text={'Empieza este Quiz!'} variant="h3" align="center" />
           <Paragraph text={'Categoria ' + category.name} align="center" />
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
-            <Button title="Empezar" onClick={() => initQuiz()} animation />
+          <Box
+            sx={{ display: 'flex', flexDirection: 'column', rowGap: 2, py: 2 }}
+          >
+            <Box
+              sx={{ display: 'flex', justifyContent: 'center', columnGap: 1 }}
+            >
+              <Paragraph text={`${showTimer ? 'Con' : 'Sin'} Temporizador`} />
+              <Switch onChange={(isOn) => setShowTimer(isOn)} />
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Button title="Empezar" onClick={() => initQuiz()} animation />
+            </Box>
           </Box>
         </>
       )}

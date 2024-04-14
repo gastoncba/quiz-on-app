@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Paragraph, Button } from '../../components';
-
 import { Grid, Box } from '@mui/material';
-import { motion } from 'framer-motion';
+
+import { Paragraph, Button, Animation } from '../../components';
 
 interface LandingProps {}
 
@@ -12,18 +11,10 @@ export const LandingScreen: React.FC<LandingProps> = () => {
   return (
     <Grid container justifyContent={'center'} sx={{ py: 2 }}>
       <Grid item xs={12} sm={8} md={6} lg={5} xl={5}>
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1 }}
-        >
+        <Animation type="SLICE">
           <Paragraph text={'Quiz On'} align="center" variant="h1" />
-        </motion.div>
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        </Animation>
+        <Animation type="BOOM">
           <Paragraph
             text={'Empeza a constestar nuestros quiz!!'}
             align="center"
@@ -36,7 +27,7 @@ export const LandingScreen: React.FC<LandingProps> = () => {
               animation
             />
           </Box>
-        </motion.div>
+        </Animation>
       </Grid>
     </Grid>
   );

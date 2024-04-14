@@ -3,7 +3,6 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Box, Container, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 
 import {
   Paragraph,
@@ -20,6 +19,7 @@ import {
   List,
   Item,
   SearchBar,
+  Animation,
 } from '../../components';
 import { Category } from '../../models';
 import { CategoryServices } from '../../services';
@@ -103,7 +103,9 @@ export const HomeScreen: React.FC<HomeProps> = () => {
         })),
       });
       showToast('Pregunta agregada con exito!', 'success');
-      showToast('Muchas gracias 😉');
+      setTimeout(() => {
+        showToast('Muchas gracias 😉');
+      }, 3000);
     } catch (error) {
       showToast('Error al agregar pregunta', 'error');
     } finally {
@@ -169,23 +171,15 @@ export const HomeScreen: React.FC<HomeProps> = () => {
 
   return (
     <>
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.6 }}
-      >
+      <Animation type="BOOM" duration={0.6}>
         <Paragraph text={'Categorias'} variant="h3" align="center" />
-      </motion.div>
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.5 }}
-      >
+      </Animation>
+      <Animation type="BOOM">
         <Paragraph
           text={'Selecciona una categoria para comenzar!'}
           align="center"
         />
-      </motion.div>
+      </Animation>
       {loading ? (
         <Loader />
       ) : (

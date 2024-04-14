@@ -11,3 +11,5 @@ export * from './Input/Input.component';
 export * from './Switch/Switch.component';
 export * from './List/List.component';
 export * from './SearchBar/SearchBar.component';
+export * from './Animation/Animation.component';
+export * from './Timer/Timer.component';
