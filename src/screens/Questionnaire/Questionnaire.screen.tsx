@@ -123,7 +123,7 @@ export const QuestionnaireScreen: React.FC<QuestionnaireProps> = () => {
                           isCorrect
                             ? 'Correcto!'
                             : 'Incorrecto, Suerte para la próxima',
-                          isCorrect ? undefined : 'error',
+                          undefined,
                           isCorrect ? '😎' : '😔',
                           'bottom-center',
                           2500

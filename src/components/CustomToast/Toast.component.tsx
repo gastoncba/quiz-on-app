@@ -17,7 +17,6 @@ export const showToast = (
         position,
         autoClose,
         transition,
-        icon: () => icon,
       });
       break;
     case 'success':
@@ -25,7 +24,6 @@ export const showToast = (
         position,
         autoClose,
         transition,
-        icon: () => icon,
       });
       break;
     case 'error':
@@ -33,7 +31,6 @@ export const showToast = (
         position,
         autoClose,
         transition,
-        icon: () => icon,
       });
       break;
     case 'warning':
@@ -41,7 +38,6 @@ export const showToast = (
         position,
         autoClose,
         transition,
-        icon: () => icon,
       });
       break;
     default:
